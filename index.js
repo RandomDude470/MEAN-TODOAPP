@@ -4,9 +4,12 @@ import mongoose, { mongo } from "mongoose";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import cors from "cors";
+import dotenv from "dotenv"
 
+
+dotenv.config();
 const app = express();
-mongoose.connect("mongodb://127.0.0.1:27017/newdat");
+mongoose.connect(process.env.CONNECTION_STRING);
 mongoose.pluralize(null);
 const task = mongoose.model("t", {
   _id: Number,
@@ -14,7 +17,6 @@ const task = mongoose.model("t", {
   desc: String,
   date: String,
 });
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 app.use(cors());
 app.use(express.static("src"));
@@ -36,6 +38,7 @@ app.put("/api/patch", bodyParser.json(), (req, res) => {
   });
 });
 
-app.listen(3001, () => {
+app.listen(process.env.PORT | 3001, () => {
   console.log("Works!");
+  console.log(`listening on port : ${process.env.PORT}`);
 });
